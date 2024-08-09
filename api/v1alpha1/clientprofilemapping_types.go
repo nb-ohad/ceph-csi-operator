@@ -20,29 +20,22 @@ import (
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 )
 
-// BlockPoolRefSpec identify a blockpool - client profile pair
-type BlockPoolRefSpec struct {
-	//+kubebuilder:validation:Required
-	ClientProfileName string `json:"clientProfileName,omitempty"`
+// MappingsSepc define a mapping between a local and remote profiles 
+type MappingsSepc struct {
+    //+kubebuilder:validation:Required
+    LocalClientProfile string `json:"localClientProfile,omitempty"`
+    
+    //+kubebuilder:validation:Required
+    RemoteClientProfile string `json:"remoteClientProfile,omitempty"`
 
-	//+kubebuilder:validation:Required
-	//+kubebuilder:validation:Minimum:=0
-	PoolId int `json:"poolId,omitempty"`
-}
-
-// BlockPoolMappingSpec define a mapiing between a local and remote block pools
-type BlockPoolMappingSpec struct {
-	//+kubebuilder:validation:Required
-	Local BlockPoolRefSpec `json:"local,omitempty"`
-
-	//+kubebuilder:validation:Required
-	Remote BlockPoolRefSpec `json:"remote,omitempty"`
+    //+kubebuilder:validation:Optional
+    BlockPoolIdMapping map[string]string `json:"blockPoolIdMapping,omitempty"`
 }
 
 // ClientProfileMappingSpec defines the desired state of ClientProfileMapping
 type ClientProfileMappingSpec struct {
-	//+kubebuilder:validation:Optional
-	BlockPoolMapping []BlockPoolMappingSpec `json:"blockPoolMapping,omitempty"`
+	//+kubebuilder:validation:Required
+	Mappings []MappingsSepc `json:"mappings,omitempty"`
 }
 
 // ClientProfileMappingStatus defines the observed state of ClientProfileMapping
@@ -69,3 +62,4 @@ type ClientProfileMappingList struct {
 	metav1.ListMeta `json:"metadata,omitempty"`
 	Items           []ClientProfileMapping `json:"items"`
 }
+
